@@ -1,44 +1,35 @@
 import os
-import re
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-openFile='../data/e6'
-#PATH='e6engl'
+import linecache
+import string
+import pickle
+from CalculateSimilar import *
 
-def ifFileExists(filename):
-    try:
-        open(filename)
-        return True
-    except:
-        print "The similar file is missing or is not readable"
-        return exit(0)
+path = '../data/'
+openFile = os.path.join(path,'e6')
+if not os.path.isfile(os.path.join(path,'dictionary.txt')):
+    os.system("python GetDict.py")
 
+dic = open(os.path.join(path,'dictionary.txt'),'rb')
+word_dict = pickle.load(dic)
+uni = open(os.path.join(path,'union.txt'),'rb')
+union = pickle.load(uni)
+flag = True
+while flag:
+    Jaccard = []
+    word_sentence_set = set()
+    word_in_sentence = []
+    inters = []
+    Sentence = raw_input("Please enter the sentence : ")
+    Jaccard,inters,word_sentence_set,word_in_sentence = wordInSentence(Sentence,word_dict,word_sentence_set,word_in_sentence)
+    Jaccard = valueOfJaccard(openFile,word_dict,word_in_sentence,word_sentence_set,Jaccard,inters,union)
 
-def findSimilarSentence(filename,sentence):
-    file=open(filename)
-    lines = file.readlines()
-    rowNumber =len(lines)
-    count = [ 0 for i in range(rowNumber)]
-    aLineASentence = re.split(r'\s+',sentence)
-    sentenceLength = len(aLineASentence)
-    #print lines 
-    similarWordNumber = -1
-    for oneLine in lines:
-        similarWordNumber = similarWordNumber+1
-        noPunctuation = re.split(r'\s+',oneLine)
-        WordNumber = len(noPunctuation)
-        for indexOne in range(sentenceLength):
-            for indexTwo in range(WordNumber):
-                if cmp(aLineASentence[indexOne].lower(),noPunctuation[indexTwo].lower())==0:
-                    count[similarWordNumber] = count[similarWordNumber]+1
     print 'The similar sentence is:'
-    for index  in range(rowNumber):
-        if count[index]==max(count):
-            print lines[index].encode('gbk')
-
-
-ifFileExists(openFile)
-sentence = raw_input("Please enter the sentence : ")
-findSimilarSentence(openFile,sentence)
-
+    for index in range(len(Jaccard)):
+        if Jaccard[index] == max(Jaccard):
+            print linecache.getline(openFile,word_sentence_set[index])
+    ifQuit = raw_input("Please enter the Key:Y(quit),other(continue)")
+    if ifQuit == 'Y':
+        flag = 0
+    else:
+        pass
