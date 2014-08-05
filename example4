@@ -1,7 +1,0 @@
-cat e4_1.txt | tr '[A-Z]' '[a-z]' > tmp1.txt
-cat e4_2.txt | tr '[A-Z]' '[a-z]' > tmp2.txt
-sed -i 's/[^A-Za-z]/\n/g' tmp1.txt
-sed -i 's/[^A-Za-z]/\n/g' tmp2.txt
-sort -u tmp1.txt >tmp3.txt
-sort -u tmp2.txt >tmp4.txt
-comm tmp4.txt tmp3.txt
