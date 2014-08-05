@@ -1,1 +1,0 @@
-cat e5 | awk '{split($0,lis," - - ");print lis[1]}' | sort -u
