@@ -1,4 +1,0 @@
-cat e2_1.txt | tr '[A-Z]' '[a-z]' > tmp.txt
-sed -i 's/ * /\n/g' tmp.txt
-sort -u tmp.txt > tmp2.txt
-comm e2_2.txt tmp2.txt
